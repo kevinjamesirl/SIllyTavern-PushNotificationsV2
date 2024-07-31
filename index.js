@@ -1,13 +1,35 @@
 import { substituteParams } from '../../../../script.js';
 
+// Function to dynamically load a JavaScript file
+function loadFile(url, type) {
+    return new Promise((resolve, reject) => {
+        if (type === 'js') {
+            const script = document.createElement('script');
+            script.src = url;
+            script.type = 'text/javascript';
+            script.onload = resolve;
+            script.onerror = reject;
+            document.head.appendChild(script);
+        } else {
+            reject(new Error('Unsupported file type'));
+        }
+    });
+}
+
 // Register the service worker if not already registered
 if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('./serviceworker.js').then((registration) => {
-        console.log('Service Worker registered with scope:', registration.scope);
-        initializeNotifications();
-    }).catch((error) => {
-        console.error('Service Worker registration failed:', error);
-    });
+    loadFile('scripts/extensions/third-party/SillyTavern-PushNotifications/service-worker.js', 'js')
+        .then(() => {
+            navigator.serviceWorker.register('/service-worker.js').then((registration) => {
+                console.log('Service Worker registered with scope:', registration.scope);
+                initializeNotifications();
+            }).catch((error) => {
+                console.error('Service Worker registration failed:', error);
+            });
+        })
+        .catch((error) => {
+            console.error('Failed to load service worker script:', error);
+        });
 } else {
     console.warn('Service Workers not supported');
 }
