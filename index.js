@@ -20,7 +20,7 @@ function loadFile(src, type, callback) {
     }
 }
 
-loadFile('scripts/extensions/third-party/SIllyTavern-PushNotificationsV2/sw.js', 'js');
+//loadFile('scripts/extensions/third-party/SIllyTavern-PushNotificationsV2/sw.js', 'js');
 
 // Register service worker
 if ('serviceWorker' in navigator) {
@@ -66,7 +66,7 @@ function initializeNotifications() {
                 console.log("SENDING NOTIFICATION");
 
                 // Old method
-                const notification = new Notification(message.name, {
+                /* const notification = new Notification(message.name, {
                     body: substituteParams(message.mes),
                     icon: location.origin + avatar,
                 });
@@ -75,7 +75,7 @@ function initializeNotifications() {
                     window.focus();
                 };
 
-                setTimeout(notification.close.bind(notification), 10000);
+                setTimeout(notification.close.bind(notification), 10000); */
 
                 // New method
                 navigator.serviceWorker.ready.then((registration) => {
