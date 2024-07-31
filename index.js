@@ -37,7 +37,7 @@ function handleVisibilityChange() {
 
 // Register service worker
 if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('scripts/extensions/third-party/SIllyTavern-PushNotificationsV2/sw.js').then(registration => {
+    navigator.serviceWorker.register('./sw.js').then(registration => {
         console.log('Service Worker registered with scope:', registration.scope);
 
         // Check for notification permission and request if not already granted
@@ -67,6 +67,7 @@ function setupNotifications() {
     const { eventSource, event_types } = window['SillyTavern'].getContext();
     
     eventSource.on(event_types.MESSAGE_RECEIVED, (messageId) => {
+		console.log("MESSAGE RECEIVED");
         // if window is focused or visible, don't show notification
         // if (document.hasFocus() || document.visibilityState === 'visible') return;
 
