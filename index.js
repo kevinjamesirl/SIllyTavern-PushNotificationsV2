@@ -53,7 +53,7 @@ function initializeNotifications() {
     Notification.requestPermission().then((permission) => {
         if (permission === 'granted') {
             const { eventSource, event_types } = window['SillyTavern'].getContext();
-            eventSource.on(event_types.MESSAGE_RENDERED, (messageId) => {
+            eventSource.on(event_types.CHARACTER_MESSAGE_RENDERED, (messageId) => {
                 console.log("WE GOT A MESSAGE");
 
                 const context = window['SillyTavern'].getContext();
