@@ -83,6 +83,7 @@ function initializeNotifications() {
                     registration.showNotification(message.name, {
                         body: substituteParams(message.mes),
                         icon: location.origin + avatar,
+						image: "/user/images/Jessica/Jessica_2024-07-31@16h36m45s.png"",
                         tag: messageId // Ensure notifications with the same tag replace each other
                     });
                 }).catch(error => {
