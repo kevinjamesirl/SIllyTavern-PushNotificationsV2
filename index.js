@@ -54,38 +54,39 @@ function initializeNotifications() {
         if (permission === 'granted') {
             const { eventSource, event_types } = window['SillyTavern'].getContext();
             eventSource.on(event_types.MESSAGE_RECEIVED, (messageId) => {
-				console.log("WE GOT A MESSAGE");
-                // if window is focused, don't show notification
-                // if (document.hasFocus()) return;
+                console.log("WE GOT A MESSAGE");
 
                 const context = window['SillyTavern'].getContext();
                 const message = context.chat[messageId];
 
                 if (!message || message.mes === '' || message.mes === '...' || message.is_user) return;
-				
+
                 const avatar = message.force_avatar ?? `/thumbnail?type=avatar&file=${encodeURIComponent(context.characters[context.characterId]?.avatar)}`;
-				
-				console.log("SENDING NOTIFICATION");
-				
-				const notification = new Notification(message.name, {
-					body: substituteParams(message.mes),
-					icon: location.origin + avatar,
-				});
 
-				notification.onclick = () => {
-					window.focus();
-				};
+                console.log("SENDING NOTIFICATION");
 
-				setTimeout(notification.close.bind(notification), 10000);
-					
-				
-				// new method?
+                // Old method
+                const notification = new Notification(message.name, {
+                    body: substituteParams(message.mes),
+                    icon: location.origin + avatar,
+                });
+
+                notification.onclick = () => {
+                    window.focus();
+                };
+
+                setTimeout(notification.close.bind(notification), 10000);
+
+                // New method
                 navigator.serviceWorker.ready.then((registration) => {
+                    console.log("Service Worker ready, showing notification");
                     registration.showNotification(message.name, {
                         body: substituteParams(message.mes),
                         icon: location.origin + avatar,
                         tag: messageId // Ensure notifications with the same tag replace each other
                     });
+                }).catch(error => {
+                    console.error('Error showing notification:', error);
                 });
             });
         } else {

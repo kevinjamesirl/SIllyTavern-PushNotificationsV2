@@ -1,4 +1,4 @@
-console.log('Hello from service worker!') 
+console.log('Hello from service worker!');
 
 self.addEventListener('notificationclick', (event) => {
     event.notification.close();
