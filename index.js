@@ -66,6 +66,20 @@ function initializeNotifications() {
                 const avatar = message.force_avatar ?? `/thumbnail?type=avatar&file=${encodeURIComponent(context.characters[context.characterId]?.avatar)}`;
 				
 				console.log("SENDING NOTIFICATION");
+				
+				const notification = new Notification(message.name, {
+					body: substituteParams(message.mes),
+					icon: location.origin + avatar,
+				});
+
+				notification.onclick = () => {
+					window.focus();
+				};
+
+				setTimeout(notification.close.bind(notification), 10000);
+					
+				
+				// new method?
                 navigator.serviceWorker.ready.then((registration) => {
                     registration.showNotification(message.name, {
                         body: substituteParams(message.mes),
