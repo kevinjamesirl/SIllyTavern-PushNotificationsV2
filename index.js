@@ -22,22 +22,31 @@ function loadFile(src, type, callback) {
 
 loadFile('scripts/extensions/third-party/SIllyTavern-PushNotificationsV2/sw.js', 'js');
 
-// Register the service worker if not already registered
+// Register service worker
 if ('serviceWorker' in navigator) {
-    loadFile('scripts/extensions/third-party/SIllyTavern-PushNotificationsV2/sw.js', 'js')
-        .then(() => {
-            navigator.serviceWorker.register('/service-worker.js').then((registration) => {
-                console.log('Service Worker registered with scope:', registration.scope);
-                initializeNotifications();
-            }).catch((error) => {
-                console.error('Service Worker registration failed:', error);
+    navigator.serviceWorker.register('scripts/extensions/third-party/SIllyTavern-PushNotificationsV2/sw.js').then(registration => {
+        console.log('Service Worker registered with scope:', registration.scope);
+
+        // Check for notification permission and request if not already granted
+        if (Notification.permission === 'default') {
+            Notification.requestPermission().then((permission) => {
+                if (permission === 'granted') {
+                    setupNotifications();
+                } else {
+                    console.warn('Notifications not allowed');
+                }
             });
-        })
-        .catch((error) => {
-            console.error('Failed to load service worker script:', error);
-        });
+        } else if (Notification.permission === 'granted') {
+            setupNotifications();
+        } else {
+            console.warn('Notifications not allowed');
+        }
+
+    }).catch(error => {
+        console.error('Service Worker registration failed:', error);
+    });
 } else {
-    console.warn('Service Workers not supported');
+    console.warn('Service Workers are not supported in this browser');
 }
 
 function initializeNotifications() {
