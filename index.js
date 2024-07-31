@@ -1,26 +1,31 @@
 import { substituteParams } from '../../../../script.js';
 
 // Function to dynamically load a JavaScript file
-function loadFile(url, type) {
-    return new Promise((resolve, reject) => {
-        if (type === 'js') {
-            const script = document.createElement('script');
-            script.src = url;
-            script.type = 'text/javascript';
-            script.onload = resolve;
-            script.onerror = reject;
-            document.head.appendChild(script);
-        } else {
-            reject(new Error('Unsupported file type'));
-        }
-    });
+function loadFile(src, type, callback) {
+    var elem;
+
+    if (type === 'css') {
+        elem = document.createElement('link');
+        elem.rel = 'stylesheet';
+        elem.href = src;
+    } else if (type === 'js') {
+        elem = document.createElement('script');
+        elem.src = src;
+        elem.onload = function () {
+            if (callback) callback();
+        };
+    }
+
+    if (elem) {
+        document.head.appendChild(elem);
+    }
 }
 
 // Register the service worker if not already registered
 if ('serviceWorker' in navigator) {
     loadFile('scripts/extensions/third-party/SillyTavern-PushNotifications/service-worker.js', 'js')
         .then(() => {
-            navigator.serviceWorker.register('/service-worker.js').then((registration) => {
+            navigator.serviceWorker.register('./service-worker.js').then((registration) => {
                 console.log('Service Worker registered with scope:', registration.scope);
                 initializeNotifications();
             }).catch((error) => {
