@@ -24,7 +24,7 @@ loadFile('scripts/extensions/third-party/SIllyTavern-PushNotificationsV2/sw.js',
 
 // Register service worker
 if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('scripts/extensions/third-party/SIllyTavern-PushNotificationsV2/sw.js').then(registration => {
+    navigator.serviceWorker.register('/sw.js').then(registration => {
         console.log('Service Worker registered with scope:', registration.scope);
 
         // Check for notification permission and request if not already granted
