@@ -49,6 +49,16 @@ if ('serviceWorker' in navigator) {
     console.warn('Service Workers are not supported in this browser');
 }
 
+function previousMessageHadImage(messages) {
+    if (messages.length < 2) {
+        return false; // Not enough messages to check the previous one
+    }
+    
+    const previousMessage = messages[messages.length - 2];
+    return previousMessage.extra && previousMessage.extra.image ? true : false;
+}
+
+
 function initializeNotifications() {
     Notification.requestPermission().then((permission) => {
         if (permission === 'granted') {
@@ -58,7 +68,9 @@ function initializeNotifications() {
 
                 const context = window['SillyTavern'].getContext();
                 const message = context.chat[messageId];
-
+				const previousMessage = context.chat[messageId - 1];
+				console.log(previousMessage.extra && previousMessage.extra.image);
+				
                 if (!message || message.mes === '' || message.mes === '...' || message.is_user) return;
 
                 const avatar = message.force_avatar ?? `/thumbnail?type=avatar&file=${encodeURIComponent(context.characters[context.characterId]?.avatar)}`;
