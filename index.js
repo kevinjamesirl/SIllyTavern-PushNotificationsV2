@@ -1,5 +1,6 @@
 import { substituteParams } from '../../../../script.js';
 
+// Register the service worker if not already registered
 if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('/service-worker.js').then((registration) => {
         console.log('Service Worker registered with scope:', registration.scope);
@@ -7,34 +8,8 @@ if ('serviceWorker' in navigator) {
     }).catch((error) => {
         console.error('Service Worker registration failed:', error);
     });
-
-    // Define the service worker code inline
-    const serviceWorkerCode = `
-        self.addEventListener('notificationclick', (event) => {
-            event.notification.close();
-            event.waitUntil(
-                clients.matchAll({ type: 'window' }).then((clientList) => {
-                    if (clients.openWindow) {
-                        return clients.openWindow('/');
-                    }
-                })
-            );
-        });
-    `;
-
-    // Create a blob of the service worker code
-    const blob = new Blob([serviceWorkerCode], { type: 'application/javascript' });
-
-    // Create a URL for the blob
-    const serviceWorkerURL = URL.createObjectURL(blob);
-
-    // Register the service worker using the blob URL
-    navigator.serviceWorker.register(serviceWorkerURL).then((registration) => {
-        console.log('Service Worker registered with scope:', registration.scope);
-        initializeNotifications();
-    }).catch((error) => {
-        console.error('Service Worker registration failed:', error);
-    });
+} else {
+    console.warn('Service Workers not supported');
 }
 
 function initializeNotifications() {
