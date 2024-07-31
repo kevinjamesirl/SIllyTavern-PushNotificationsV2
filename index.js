@@ -31,13 +31,13 @@ if ('serviceWorker' in navigator) {
         if (Notification.permission === 'default') {
             Notification.requestPermission().then((permission) => {
                 if (permission === 'granted') {
-                    setupNotifications();
+                    initializeNotifications();
                 } else {
                     console.warn('Notifications not allowed');
                 }
             });
         } else if (Notification.permission === 'granted') {
-            setupNotifications();
+            initializeNotifications();
         } else {
             console.warn('Notifications not allowed');
         }
