@@ -69,6 +69,7 @@ function initializeNotifications() {
                 const context = window['SillyTavern'].getContext();
                 const message = context.chat[messageId];
 				const lastMessage = context.chat[messageId - 1];
+				console.log(lastMessage);
 				if (lastMessage.extra && lastMessage.extra.image) {
 					console.log("The last message contains an image:", lastMessage.extra.image);
 				} else {
