@@ -64,6 +64,8 @@ function initializeNotifications() {
         if (permission === 'granted') {
             const { eventSource, event_types } = window['SillyTavern'].getContext();
             eventSource.on(event_types.MESSAGE_RECEIVED, (messageId) => {
+				// if window is focused, don't show notification
+				if (document.hasFocus()) return;
                 console.log("WE GOT A MESSAGE");
 
                 const context = window['SillyTavern'].getContext();
