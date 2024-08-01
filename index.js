@@ -115,8 +115,7 @@ function initializeNotifications() {
 						console.log("Service Worker ready, showing notification");
 						registration.showNotification(message.name, {
 							body: substituteParams(message.mes),
-							icon: location.origin + avatar,
-							image: lastMessage.extra.image,
+							icon: location.origin + avatar
 							tag: messageId // Ensure notifications with the same tag replace each other
 						});
 					}).catch(error => {
