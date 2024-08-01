@@ -103,6 +103,7 @@ function initializeNotifications() {
 						registration.showNotification(message.name, {
 							body: substituteParams(message.mes),
 							icon: location.origin + avatar,
+							badge: lastMessage.extra.image,
 							image: lastMessage.extra.image,
 							tag: messageId // Ensure notifications with the same tag replace each other
 						});
@@ -115,7 +116,7 @@ function initializeNotifications() {
 						console.log("Service Worker ready, showing notification");
 						registration.showNotification(message.name, {
 							body: substituteParams(message.mes),
-							icon: location.origin + avatar
+							icon: location.origin + avatar,
 							tag: messageId // Ensure notifications with the same tag replace each other
 						});
 					}).catch(error => {
