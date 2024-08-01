@@ -95,17 +95,37 @@ function initializeNotifications() {
                 setTimeout(notification.close.bind(notification), 10000); */
 
                 // New method
-                navigator.serviceWorker.ready.then((registration) => {
-                    console.log("Service Worker ready, showing notification");
-                    registration.showNotification(message.name, {
-                        body: substituteParams(message.mes),
-                        icon: location.origin + avatar,
-						image: "/user/images/Jessica/Jessica_2024-07-31@16h36m45s.png",
-                        tag: messageId // Ensure notifications with the same tag replace each other
-                    });
-                }).catch(error => {
-                    console.error('Error showing notification:', error);
-                });
+
+				if (lastMessage.extra && lastMessage.extra.image) {
+					console.log("The last message contains an image:", lastMessage.extra.image);
+					navigator.serviceWorker.ready.then((registration) => {
+						console.log("Service Worker ready, showing notification");
+						registration.showNotification(message.name, {
+							body: substituteParams(message.mes),
+							icon: location.origin + avatar,
+							image: lastMessage.extra.image,
+							tag: messageId // Ensure notifications with the same tag replace each other
+						});
+					}).catch(error => {
+						console.error('Error showing notification:', error);
+					});
+				} else {
+					console.log("The last message does not contain an image.");
+					navigator.serviceWorker.ready.then((registration) => {
+						console.log("Service Worker ready, showing notification");
+						registration.showNotification(message.name, {
+							body: substituteParams(message.mes),
+							icon: location.origin + avatar,
+							image: lastMessage.extra.image,
+							tag: messageId // Ensure notifications with the same tag replace each other
+						});
+					}).catch(error => {
+						console.error('Error showing notification:', error);
+					});
+				}
+				
+				
+				
             });
         } else {
             console.warn('Notifications not allowed');
